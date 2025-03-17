@@ -29,6 +29,7 @@ pub enum EndPoint {
     S3DualStack,
     GCS,
     DigitalOceanSpaces,
+    Custom(&'static str),
 }
 
 /// `ReleaseList` Builder
@@ -589,10 +590,14 @@ fn fetch_releases_from_s3(
             bucket_name, region?
         ),
         EndPoint::GCS => format!("https://storage.googleapis.com/{}/", bucket_name),
+        EndPoint::Custom(url) => format!("{}/{}/", url, bucket_name),
     };
 
     let api_url = match end_point {
-        EndPoint::S3 | EndPoint::S3DualStack | EndPoint::DigitalOceanSpaces => format!(
+        EndPoint::S3
+        | EndPoint::S3DualStack
+        | EndPoint::DigitalOceanSpaces
+        | EndPoint::Custom(_) => format!(
             "{}?list-type=2&max-keys={}{}",
             download_base_url, MAX_KEYS, prefix
         ),
