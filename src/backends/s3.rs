@@ -437,7 +437,7 @@ impl ReleaseUpdate for Update {
         )?;
         let rel = releases
             .iter()
-            .max_by(|x, y| match bump_is_greater(&y.version, &x.version) {
+            .max_by(|x, y| match bump_is_greater(&x.version, &y.version) {
                 Ok(is_greater) => {
                     if is_greater {
                         Ordering::Greater
@@ -471,7 +471,7 @@ impl ReleaseUpdate for Update {
             .cloned()
             .collect::<Vec<_>>();
 
-        releases.sort_by(|x, y| match bump_is_greater(&y.version, &x.version) {
+        releases.sort_by(|x, y| match bump_is_greater(&x.version, &y.version) {
             Ok(is_greater) => {
                 if is_greater {
                     Ordering::Greater
